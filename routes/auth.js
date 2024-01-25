@@ -1,7 +1,7 @@
 const express=require('express')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
-
+const adminSchema=require('../model/admin.js')
 const User=require('../model/user.js')
 const router=express.Router()
 
@@ -51,6 +51,21 @@ router.post('/forgotpassword',async (req,res)=>{
   } catch (error) {
     res.status(500).json({error:"login failed"})
 
+  }
+})
+router.post('/registers',async (req,res)=>{
+  try {
+    const {email,phno}=req.body
+    // const hashedPassword=await bcrypt.hash(password,10)
+    const users=new adminSchema({
+      email,
+      phno
+    })
+    await users.save()
+    res.status(200).json({message:"user registered successfully"})
+
+  } catch (error) {
+    res.status(500).json({error:"registration failed"})
   }
 })
 module.exports=router
